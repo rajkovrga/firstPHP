@@ -1,29 +1,6 @@
 <?php
   
-    try
-    {
-
-    $config = [
-        'driver' => 'mysql',
-        'user' => 'root',
-        'host' => 'localhost',
-        'database' => 'proba',
-        'password' => '',
-        'charset' => 'utf8',
-    ];
- 
-    $pdo = new PDO($config['driver'] . ':dbname=' . $config['database'] .';host=' . $config['host'] . ';charset=' . $config['charset'], 
-            $config['user'],
-            $config['password']
-
-    );
-    }
-    catch(PDOException $e)
-    {
-      echo 'Connection filed: ' . $e->getMessage();
-      echo 'Doslo je do greske';
-      return;
-    }
+    require_once __DIR__ . '/connection.php';
    
     if (isset($_POST['submit']))
     {
@@ -37,7 +14,7 @@
         {
             die('Unesite sve');
         } 
-    }
+   
     $sql = 'INSERT INTO `users`(`FirstName`, `LastName`, `email`, `password`) VALUES (:fname,:lname,:email,:pass)';
     try
     {
@@ -49,14 +26,14 @@
             ':email' => $mail,
             ':pass' => password_hash($password,PASSWORD_BCRYPT),
         ]);
-        header("Location: login.php");      
+        header("Location: login.php");  
     }
     catch(Exeption $e )
     {
         die($e->getMessage());
     }
   
-
+}
 
 ?>
 <!DOCTYPE html>
@@ -76,10 +53,11 @@
        
    
     <tr> <td> <span>Mail</span><input type="mail" name="mail" id=""/></td></tr>
-    <tr> <td>    <span>Password</span><input type="text" name="password" id=""/></td></tr>
+    <tr> <td>    <span>Password</span><input type="password" name="password" id=""/></td></tr>
     <tr> <td>    <input type="submit" value="submit" name="submit" id=""/></td></tr>
     </table>
-    
+
+    <a href="login.php">Login</a>
 
    
 
