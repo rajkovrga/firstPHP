@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once __DIR__ . '/connection.php';
 
 if(isset($_POST['submit']))
@@ -19,30 +19,23 @@ if(isset($_POST['submit']))
     die();
     }
 
-    $sql = 'SELECT * from `users` where `email`=:mail and `password`=:pass' ;
+    $sql = 'SELECT * from `users` where `email`=:mail';
 
     $statement = $pdo->prepare($sql);
-    $statement->execute([
+    if($statement->execute([
         ':mail' => $mail,
-        ':pass' => password_hash($pass,PASSWORD_BCRYPT),
-    ]);
-
-    if(!password_verify($pass,PASSWORD_BCRYPT))
-    {
-        echo "Nije tacan email ili lozinka";
-        die();
+    ])) {
+            
+        $user = $sth->fetch(PDO::FETCH_ASSOC);
+        if( $user === null || !password_verify($pass, $user['password'], PASSWORD_BCRYPT) ) {
+            die('Email ili sifra nisu u redu');
+        }
+        $_SESSION['logged_id'] = true;
+        $_SESSION['user'] = $user;
+        
+        header('Location: home.php?message=Ulogovani ste&logged_in=true');
     }
-
-  
-
-    if()
-    {
-
-    }
-
-}
-
-
+  }
 ?>
 
 <!DOCTYPE html>
