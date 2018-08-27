@@ -17,13 +17,12 @@
             $config['password']
 
     );
-    
-  
-  
     }
     catch(PDOException $e)
     {
-      echo 'Connection filed: ' . $e->getMessage();  
+      echo 'Connection filed: ' . $e->getMessage();
+      echo 'Doslo je do greske';
+      return;
     }
    
     if (isset($_POST['submit']))
@@ -36,13 +35,8 @@
       
         if( !( isset($fname) && isset($lname) && isset($mail) && isset($password) ) )
         {
-            echo 'Unesite sve';
-            die();
-        }
-        
-
-    
-   
+            die('Unesite sve');
+        } 
     }
     $sql = 'INSERT INTO `users`(`FirstName`, `LastName`, `email`, `password`) VALUES (:fname,:lname,:email,:pass)';
     try
@@ -55,13 +49,13 @@
             ':email' => $mail,
             ':pass' => password_hash($password,PASSWORD_BCRYPT),
         ]);
-        
+        header("Location: login.php");      
     }
     catch(Exeption $e )
     {
-            var_dump($e);
+        die($e->getMessage());
     }
-  header("Location: login.php");
+  
 
 
 ?>
