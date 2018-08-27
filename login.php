@@ -15,17 +15,30 @@ if(isset($_POST['submit']))
 
     if(!filter_var($mail,FILTER_VALIDATE_EMAIL))
     {
-    echo "nije ispravan format emaila";
+    echo "Nije ispravan format emaila";
     die();
     }
 
-    if(!(password_verify($pass,PASSWORD_BCRYPT))
+    $sql = 'SELECT * from `users` where `email`=:mail and `password`=:pass' ;
+
+    $statement = $pdo->prepare($sql);
+    $statement->execute([
+        ':mail' => $mail,
+        ':pass' => password_hash($pass,PASSWORD_BCRYPT),
+    ]);
+
+    if(!password_verify($pass,PASSWORD_BCRYPT))
     {
         echo "Nije tacan email ili lozinka";
         die();
     }
 
+  
 
+    if()
+    {
+
+    }
 
 }
 
